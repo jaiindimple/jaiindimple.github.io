@@ -14,7 +14,7 @@ about:
       icon: "fa-brands fa-x-twitter"
     - icon: github
       text: Github
-      href: https://github.com/Dimplejain23
+      href: https://github.com/jaiindimple
     - icon: envelope
       text: Email
       href: mailto:jain23dimple@gmail.com

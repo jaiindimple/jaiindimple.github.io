@@ -1,0 +1,54 @@
+::: .column-screen-left
+
+---
+title: "Dimple Jain"
+about:
+  template: solana
+  links:
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/jaindimple
+    - icon: fontawesome
+      text: X
+      href: https://x.com/jaindimple95?s=21
+      icon: "fa-brands fa-x-twitter"
+    - icon: github
+      text: Github
+      href: https://github.com/Dimplejain23
+    - icon: envelope
+      text: Email
+      href: mailto:jain23dimple@gmail.com
+
+image: images/profile.png
+image-width: 12px
+image-shape: rounded
+comments: false
+format:
+  html:
+    theme: spacelab
+    page-layout: full
+    grid:
+      body-width: 850px
+---
+
+
+## About
+
+Geospatial Engineer at **Pixxel**, working with hyperspectral imagery, geospatial data processing, and automation, while bridging the gap between software engineering and geospatial solutions.
+
+Background in **Geography & Geoinformatics**, with hands-on experience in software development, satellite data analysis, and scalable geospatial systems.
+
+Passionate about open-source geospatial technologies, automation, and building scalable geospatial solutions.
+
+I've presented at open-source conferences like **FOSS4G 2023** on [Open Data for Geospatial](https://youtu.be/nKxouMKOJjk?si=A0YmiKOCbwPSDidb) and **FOSS4G Asia Seoul** on [PyQGIS](https://talks.osgeo.org/foss4g-asia-2023/talk/8KDVRF/).
+
+I also presented at [QGIS Open Day Jan 2023](https://www.youtube.com/watch?v=eqIwEyuqH-Q) and attended **STAC Sprint 2023 in the USA**, where I began contributing to open-source projects by writing documentation on [STAC tutorial](https://github.com/jaiindimple/stac-site).
+
+## Experience
+
+[Pixxel](https://www.pixxel.space/) | Geospatial Engineer | June 2020 – Present
+
+[Quantela](https://www.quantela.com/) | Spatial Data Science Intern | Dec 2019 – June 2020
+
+
+:::

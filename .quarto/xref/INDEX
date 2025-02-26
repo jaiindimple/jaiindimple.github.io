@@ -1,0 +1,23 @@
+{
+  "talks.qmd": {
+    "talks.html": "e3b41275"
+  },
+  "events.qmd": {
+    "events.html": "6496b7fb"
+  },
+  "projects.qmd": {
+    "projects.html": "ad728b89"
+  },
+  "index.qmd": {
+    "index.html": "5d406371"
+  },
+  "about.qmd": {
+    "about.html": "b18b3a6e"
+  },
+  "posts.qmd": {
+    "posts.html": "07b2e91e"
+  },
+  "presentations.qmd": {
+    "presentations.html": "4623850d"
+  }
+}

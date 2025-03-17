@@ -1,0 +1,15 @@
+---
+title: "Blog Posts"
+listing:
+  contents: 
+    - "*/index.md"
+    - "*/index.qmd"
+  sort: "date desc"
+  type: default
+  categories: true
+  sort-ui: false
+  filter-ui: false
+  fields: [date, title, description, categories, image]
+  feed: true
+page-layout: full
+---

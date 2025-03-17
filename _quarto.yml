@@ -10,7 +10,7 @@ website:
       - text: "Talks"
         href: talks.qmd
       - text: "Posts"
-        href: posts.qmd
+        href: posts
       - text: "Events"
         href: events.qmd
       - text: "Projects"

@@ -17,7 +17,9 @@ website:
         href: projects.qmd
       - text: "Presentations"
         href: presentations.qmd
-
+redirects:
+  - source: /posts
+    destination: /posts/
 format:
   html:
     theme: carto

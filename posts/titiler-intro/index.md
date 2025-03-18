@@ -270,8 +270,8 @@ The following code (in **map.html**) loads a base map, adds your TiTiler raster 
 
 If you encounter "Access to fetch at X has been blocked by CORS policy" errors in your browser console, make sure you:
 
-1. Have included the CORS middleware in `app.py` as shown above
-2. Restart your TiTiler server after making changes
+- Have included the CORS middleware in `app.py` as shown above
+- Restart your TiTiler server after making changes
 
 ### **File Not Found Errors**
 
@@ -285,9 +285,10 @@ When using `file:///` URLs:
 ### **No Tiles Showing**
 
 If your map loads but your tiles don't appear:
-1. Check the browser console for errors
-2. Verify that your GeoTIFF is Cloud-Optimized (use `rio cogeo validate` from the rio-cogeo package)
-3. Try different zoom levels - your data might not be visible at all scales
+
+- Check the browser console for errors
+- Verify that your GeoTIFF is Cloud-Optimized (use `rio cogeo validate` from the rio-cogeo package)
+- Try different zoom levels - your data might not be visible at all scales
 
 ## What's Next?
 

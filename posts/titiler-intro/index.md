@@ -5,11 +5,10 @@ categories:
   - Web GIS
   - Raster Data Visualization
 description: "A guide to using TiTiler for geospatial data visualization. Discover how to serve Cloud-Optimized GeoTIFFs through simple API endpoints for interactive web maps"
-image: api_docs.png
+image: cog_render.png
 draft: false
 ---
-
-
+##
 [TiTiler](https://developmentseed.org/titiler) is a modern map tile server that helps developers quickly serve geospatial data on the web. Think of it as a specialized tool that takes large geographic files (like satellite imagery) and slices them into small, web-friendly map tiles that load efficiently in browser-based maps.
 
 Built on FastAPI, TiTiler makes working with Cloud-Optimized GeoTIFFs, Spatio Temporal Asset Catalog and other spatial data formats straightforward, even if you're not a GIS expert. It handles all the complex work of processing geographic data and serving it through simple API endpoints that any web developer can use.
@@ -69,7 +68,7 @@ This command installs the core TiTiler package and Uvicorn, a lightning-fast ASG
 
 ### **4. Create Your TiTiler Application**
 
-Now for the fun part! Create a file named `app.py` with the following code:
+Now for the fun part! Create a file named `main.py` with the following code:
 
 ```python
 from fastapi import FastAPI
@@ -112,7 +111,7 @@ def read_index():
 
 Run the following command to start the server:
 ```bash
-uvicorn app:app --reload
+uvicorn main:app --reload
 ```
 You should see output similar to this:
 
@@ -270,7 +269,7 @@ The following code (in **map.html**) loads a base map, adds your TiTiler raster 
 
 If you encounter "Access to fetch at X has been blocked by CORS policy" errors in your browser console, make sure you:
 
-- Have included the CORS middleware in `app.py` as shown above
+- Have included the CORS middleware in `main.py` as shown above
 - Restart your TiTiler server after making changes
 
 ### **File Not Found Errors**
@@ -295,5 +294,5 @@ If your map loads but your tiles don't appear:
 Once you've got the basics working, you can explore TiTiler's more advanced features:
 
 - Custom colormaps and visualization settings
-- Tile caching for improved performance
 - Support for other formats like MosaicJSON and STAC
+- Tile caching for improved performance

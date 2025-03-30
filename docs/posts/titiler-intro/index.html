@@ -133,7 +133,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Talks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../posts/">
+    <a class="nav-link" href="../../posts/"> 
 <span class="menu-text">Posts</span></a>
   </li>  
   <li class="nav-item">
@@ -164,7 +164,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#dynamic-vs.-static-tiles-whats-the-difference" id="toc-dynamic-vs.-static-tiles-whats-the-difference" class="nav-link active" data-scroll-target="#dynamic-vs.-static-tiles-whats-the-difference">Dynamic vs.&nbsp;Static Tiles: What’s the Difference?</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link active" data-scroll-target="#section"></a></li>
+  <li><a href="#dynamic-vs.-static-tiles-whats-the-difference" id="toc-dynamic-vs.-static-tiles-whats-the-difference" class="nav-link" data-scroll-target="#dynamic-vs.-static-tiles-whats-the-difference">Dynamic vs.&nbsp;Static Tiles: What’s the Difference?</a></li>
   <li><a href="#lets-get-titiler-up-and-running" id="toc-lets-get-titiler-up-and-running" class="nav-link" data-scroll-target="#lets-get-titiler-up-and-running">Let’s Get TiTiler Up and Running!</a>
   <ul class="collapse">
   <li><a href="#create-your-project-workspace" id="toc-create-your-project-workspace" class="nav-link" data-scroll-target="#create-your-project-workspace"><strong>1. Create Your Project Workspace</strong></a></li>
@@ -238,9 +239,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<section id="section" class="level2">
+<h2 class="anchored" data-anchor-id="section"></h2>
 <p><a href="https://developmentseed.org/titiler">TiTiler</a> is a modern map tile server that helps developers quickly serve geospatial data on the web. Think of it as a specialized tool that takes large geographic files (like satellite imagery) and slices them into small, web-friendly map tiles that load efficiently in browser-based maps.</p>
 <p>Built on FastAPI, TiTiler makes working with Cloud-Optimized GeoTIFFs, Spatio Temporal Asset Catalog and other spatial data formats straightforward, even if you’re not a GIS expert. It handles all the complex work of processing geographic data and serving it through simple API endpoints that any web developer can use.</p>
 <p>In the past, putting maps on websites was a real pain. Developers had to use bulky tools like GeoServer that were hard to set up, or spend hours making thousands of <strong>static</strong> tiny map images with tools like gdal2tiles that couldn’t be changed later. TiTiler makes this so much easier. It creates <strong>dynamic</strong> map pieces right when you need them, instead of making them all beforehand. It works great with modern cloud data and doesn’t need complicated setup. This means less headache and more time to focus on building cool map features that users will love.</p>
+</section>
 <section id="dynamic-vs.-static-tiles-whats-the-difference" class="level2">
 <h2 class="anchored" data-anchor-id="dynamic-vs.-static-tiles-whats-the-difference">Dynamic vs.&nbsp;Static Tiles: What’s the Difference?</h2>
 <p>Static tiles are like pre-printed map pieces stored in folders. Once created, they’re locked—changing anything means starting over. They use lots of storage but load quickly.</p>
@@ -284,7 +288,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="create-your-titiler-application" class="level3">
 <h3 class="anchored" data-anchor-id="create-your-titiler-application"><strong>4. Create Your TiTiler Application</strong></h3>
-<p>Now for the fun part! Create a file named <code>app.py</code> with the following code:</p>
+<p>Now for the fun part! Create a file named <code>main.py</code> with the following code:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fastapi <span class="im">import</span> FastAPI</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> titiler.core.factory <span class="im">import</span> TilerFactory</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -325,7 +329,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="launch-your-titiler-server" class="level3">
 <h3 class="anchored" data-anchor-id="launch-your-titiler-server"><strong>5. Launch Your TiTiler Server</strong></h3>
 <p>Run the following command to start the server:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uvicorn</span> app:app <span class="at">--reload</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uvicorn</span> main:app <span class="at">--reload</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You should see output similar to this:</p>
 <p><img src="server_logs.png" class="img-fluid"></p>
 <blockquote class="blockquote">
@@ -466,10 +470,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="cors-issues" class="level3">
 <h3 class="anchored" data-anchor-id="cors-issues"><strong>CORS Issues</strong></h3>
 <p>If you encounter “Access to fetch at X has been blocked by CORS policy” errors in your browser console, make sure you:</p>
-<ol type="1">
-<li>Have included the CORS middleware in <code>app.py</code> as shown above</li>
+<ul>
+<li>Have included the CORS middleware in <code>main.py</code> as shown above</li>
 <li>Restart your TiTiler server after making changes</li>
-</ol>
+</ul>
 </section>
 <section id="file-not-found-errors" class="level3">
 <h3 class="anchored" data-anchor-id="file-not-found-errors"><strong>File Not Found Errors</strong></h3>
@@ -482,7 +486,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="no-tiles-showing" class="level3">
 <h3 class="anchored" data-anchor-id="no-tiles-showing"><strong>No Tiles Showing</strong></h3>
-<p>If your map loads but your tiles don’t appear: 1. Check the browser console for errors 2. Verify that your GeoTIFF is Cloud-Optimized (use <code>rio cogeo validate</code> from the rio-cogeo package) 3. Try different zoom levels - your data might not be visible at all scales</p>
+<p>If your map loads but your tiles don’t appear:</p>
+<ul>
+<li>Check the browser console for errors</li>
+<li>Verify that your GeoTIFF is Cloud-Optimized (use <code>rio cogeo validate</code> from the rio-cogeo package)</li>
+<li>Try different zoom levels - your data might not be visible at all scales</li>
+</ul>
 </section>
 </section>
 <section id="whats-next" class="level2">
@@ -490,8 +499,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Once you’ve got the basics working, you can explore TiTiler’s more advanced features:</p>
 <ul>
 <li>Custom colormaps and visualization settings</li>
-<li>Tile caching for improved performance</li>
 <li>Support for other formats like MosaicJSON and STAC</li>
+<li>Tile caching for improved performance</li>
 </ul>
 
 

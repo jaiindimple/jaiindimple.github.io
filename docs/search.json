@@ -21,11 +21,18 @@
     "text": "{{ title }}\nContent goes here."
   },
   {
-    "objectID": "talks.html",
-    "href": "talks.html",
+    "objectID": "events.html",
+    "href": "events.html",
     "title": "{{ title }}",
     "section": "",
     "text": "{{ title }}\nContent goes here."
+  },
+  {
+    "objectID": "posts/index.html",
+    "href": "posts/index.html",
+    "title": "Blog Posts",
+    "section": "",
+    "text": "Getting started with TiTiler\n\n\n\n\n\n\nWeb GIS\n\n\nRaster Data Visualization\n\n\n\nA guide to using TiTiler for geospatial data visualization. Discover how to serve Cloud-Optimized GeoTIFFs through simple API endpoints for interactive web maps\n\n\n\n\n\n17 Mar 2025\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/titiler-intro/index.html",
@@ -84,18 +91,25 @@
     "text": "What’s Next?\nOnce you’ve got the basics working, you can explore TiTiler’s more advanced features:\n\nCustom colormaps and visualization settings\nSupport for other formats like MosaicJSON and STAC\nTile caching for improved performance"
   },
   {
-    "objectID": "posts/index.html",
-    "href": "posts/index.html",
-    "title": "Blog Posts",
-    "section": "",
-    "text": "Getting started with TiTiler\n\n\n\n\n\n\nWeb GIS\n\n\nRaster Data Visualization\n\n\n\nA guide to using TiTiler for geospatial data visualization. Discover how to serve Cloud-Optimized GeoTIFFs through simple API endpoints for interactive web maps\n\n\n\n\n\n17 Mar 2025\n\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "events.html",
-    "href": "events.html",
+    "objectID": "talks.html",
+    "href": "talks.html",
     "title": "{{ title }}",
     "section": "",
     "text": "{{ title }}\nContent goes here."
+  },
+  {
+    "objectID": "talks/index.html#foss4g-prizren-2023",
+    "href": "talks/index.html#foss4g-prizren-2023",
+    "title": "Talks",
+    "section": "FOSS4G Prizren 2023",
+    "text": "FOSS4G Prizren 2023"
+  },
+  {
+    "objectID": "talks/index.html#qgis-open-day-2023",
+    "href": "talks/index.html#qgis-open-day-2023",
+    "title": "Talks",
+    "section": "QGIS Open Day 2023",
+    "text": "QGIS Open Day 2023"
   },
   {
     "objectID": "index.html",

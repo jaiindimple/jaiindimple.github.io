@@ -1,0 +1,30 @@
+---
+listing:
+  categories: false
+#   contents:
+#   - '*.qmd'
+#   - '*.md'
+  feed: true
+  filter-ui: false
+  sort: date desc
+  sort-ui: false
+  type: default
+page-layout: full
+title: Talks
+title-block-bannerrR: false
+toc: true
+toc-location: right
+toc-depth: 2
+---
+
+
+## FOSS4G-Asia Seoul 2023
+<img src="./foss4g-seoul-2023.png" alt="FOSS4G-Asia Seoul 2023" style="max-width:63%; height:auto;">
+
+## FOSS4G Prizren 2023
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/nKxouMKOJjk?si=JSE5kU_NTc0ENUd7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+## QGIS Open Day 2023
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/eqIwEyuqH-Q?si=gZe3yGxgAGud0CqS" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>

@@ -8,7 +8,7 @@ website:
       - text: "Home"
         href: index.qmd
       - text: "Talks"
-        href: talks.qmd
+        href: talks/
       - text: "Posts"
         href: posts/
       - text: "Events"

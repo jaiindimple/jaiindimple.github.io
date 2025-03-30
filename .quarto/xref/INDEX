@@ -34,5 +34,11 @@
   },
   "posts/titiler-intro/test.md": {
     "test.html": "59671b3e"
+  },
+  "talks/talks/index.qmd": {
+    "index.html": "4d5396ed"
+  },
+  "talks/index.qmd": {
+    "index.html": "afeb37a8"
   }
 }

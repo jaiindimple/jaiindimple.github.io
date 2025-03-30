@@ -4,5 +4,9 @@
     "items": [
       "/posts/titiler-intro/index.html"
     ]
+  },
+  {
+    "listing": "/talks/index.html",
+    "items": []
   }
 ]

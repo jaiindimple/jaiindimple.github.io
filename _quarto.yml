@@ -11,12 +11,12 @@ website:
         href: talks/
       - text: "Posts"
         href: posts/
-      - text: "Events"
-        href: events.qmd
-      - text: "Projects"
-        href: projects.qmd
-      - text: "Presentations"
-        href: presentations.qmd
+#      - text: "Events"
+#        href: events.qmd
+#      - text: "Projects"
+#        href: projects.qmd
+#      - text: "Presentations"
+#        href: presentations.qmd
 redirects:
   - source: /posts
     destination: /posts/

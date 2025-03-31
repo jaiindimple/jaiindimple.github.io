@@ -19,7 +19,9 @@ toc-depth: 2
 
 
 ## FOSS4G-Asia Seoul 2023
-<img src="./foss4g-seoul-2023.png" alt="FOSS4G-Asia Seoul 2023" style="max-width:63%; height:auto;">
+<a href="https://talks.osgeo.org/foss4g-asia-2023/talk/8KDVRF/">
+  <img src="./foss4g-seoul-2023.png" alt="FOSS4G-Asia Seoul 2023" style="max-width:63%; height:auto;">
+</a>
 
 ## FOSS4G Prizren 2023
 

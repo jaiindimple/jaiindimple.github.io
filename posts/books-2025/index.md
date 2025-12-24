@@ -129,7 +129,7 @@ Through this book, I learned that our gold and silver jewellery or ornaments are
 None of this would have happened without the people who nudged me towards books this year. So here's a little shoutout:
 
 - **Awais Ahmed** — CEO of Pixxel Space. Watching someone so busy still make time to read reminded me that there's always time if you really want it.
-- **Utsha Jain** — My Babhi, she keeps posting her reading experiences, and honestly, that's what motivated me to start reading again.
+- **Utsha Jain** — My Babhi, she keeps posting her reading experiences, and honestly, that's what motivated me to read more.
 - **alexandbooks** — A Twitter account I stumbled upon, and now my wishlist is dangerously long because of him.
 
 ---

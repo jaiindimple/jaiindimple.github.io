@@ -8,8 +8,10 @@ description: "A guide to using TiTiler for geospatial data visualization. Discov
 image: cog_render.png
 draft: false
 ---
-##
-[TiTiler](https://developmentseed.org/titiler) is a modern map tile server that helps developers quickly serve geospatial data on the web. Think of it as a specialized tool that takes large geographic files (like satellite imagery) and slices them into small, web-friendly map tiles that load efficiently in browser-based maps.
+
+**Note**: This post is also hosted on the official [TiTiler documentation](https://developmentseed.org/titiler/user_guide/getting_started/)
+
+TiTiler is a modern map tile server that helps developers quickly serve geospatial data on the web. Think of it as a specialized tool that takes large geographic files (like satellite imagery) and slices them into small, web-friendly map tiles that load efficiently in browser-based maps.
 
 Built on FastAPI, TiTiler makes working with Cloud-Optimized GeoTIFFs, Spatio Temporal Asset Catalog and other spatial data formats straightforward, even if you're not a GIS expert. It handles all the complex work of processing geographic data and serving it through simple API endpoints that any web developer can use.
 

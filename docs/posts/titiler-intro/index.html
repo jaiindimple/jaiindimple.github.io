@@ -152,8 +152,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#section" id="toc-section" class="nav-link active" data-scroll-target="#section"></a></li>
-  <li><a href="#dynamic-vs.-static-tiles-whats-the-difference" id="toc-dynamic-vs.-static-tiles-whats-the-difference" class="nav-link" data-scroll-target="#dynamic-vs.-static-tiles-whats-the-difference">Dynamic vs.&nbsp;Static Tiles: What’s the Difference?</a></li>
+  <li><a href="#dynamic-vs.-static-tiles-whats-the-difference" id="toc-dynamic-vs.-static-tiles-whats-the-difference" class="nav-link active" data-scroll-target="#dynamic-vs.-static-tiles-whats-the-difference">Dynamic vs.&nbsp;Static Tiles: What’s the Difference?</a></li>
   <li><a href="#lets-get-titiler-up-and-running" id="toc-lets-get-titiler-up-and-running" class="nav-link" data-scroll-target="#lets-get-titiler-up-and-running">Let’s Get TiTiler Up and Running!</a>
   <ul class="collapse">
   <li><a href="#create-your-project-workspace" id="toc-create-your-project-workspace" class="nav-link" data-scroll-target="#create-your-project-workspace"><strong>1. Create Your Project Workspace</strong></a></li>
@@ -227,12 +226,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="section" class="level2">
-<h2 class="anchored" data-anchor-id="section"></h2>
-<p><a href="https://developmentseed.org/titiler">TiTiler</a> is a modern map tile server that helps developers quickly serve geospatial data on the web. Think of it as a specialized tool that takes large geographic files (like satellite imagery) and slices them into small, web-friendly map tiles that load efficiently in browser-based maps.</p>
+<p><strong>Note</strong>: This post is also hosted on the official <a href="https://developmentseed.org/titiler/user_guide/getting_started/">TiTiler documentation</a></p>
+<p>TiTiler is a modern map tile server that helps developers quickly serve geospatial data on the web. Think of it as a specialized tool that takes large geographic files (like satellite imagery) and slices them into small, web-friendly map tiles that load efficiently in browser-based maps.</p>
 <p>Built on FastAPI, TiTiler makes working with Cloud-Optimized GeoTIFFs, Spatio Temporal Asset Catalog and other spatial data formats straightforward, even if you’re not a GIS expert. It handles all the complex work of processing geographic data and serving it through simple API endpoints that any web developer can use.</p>
 <p>In the past, putting maps on websites was a real pain. Developers had to use bulky tools like GeoServer that were hard to set up, or spend hours making thousands of <strong>static</strong> tiny map images with tools like gdal2tiles that couldn’t be changed later. TiTiler makes this so much easier. It creates <strong>dynamic</strong> map pieces right when you need them, instead of making them all beforehand. It works great with modern cloud data and doesn’t need complicated setup. This means less headache and more time to focus on building cool map features that users will love.</p>
-</section>
 <section id="dynamic-vs.-static-tiles-whats-the-difference" class="level2">
 <h2 class="anchored" data-anchor-id="dynamic-vs.-static-tiles-whats-the-difference">Dynamic vs.&nbsp;Static Tiles: What’s the Difference?</h2>
 <p>Static tiles are like pre-printed map pieces stored in folders. Once created, they’re locked—changing anything means starting over. They use lots of storage but load quickly.</p>

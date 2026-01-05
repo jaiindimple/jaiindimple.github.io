@@ -1,5 +1,5 @@
 ---
-title: "Getting started with TiTiler"
+title: "Getting Started With TiTiler"
 date: 2025-03-17
 categories:
   - Web GIS

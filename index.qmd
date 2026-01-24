@@ -18,6 +18,9 @@ about:
     - icon: envelope
       text: Email
       href: mailto:jain23dimple@gmail.com
+    - icon: youtube
+      text: YouTube
+      href: https://www.youtube.com/@geosnips
 
 image: images/profile.png
 image-width: 12px
@@ -43,6 +46,8 @@ Passionate about open-source geospatial technologies, automation, and building s
 I've presented at open-source conferences like **FOSS4G 2023** on [Open Data for Geospatial](https://youtu.be/nKxouMKOJjk?si=A0YmiKOCbwPSDidb) and **FOSS4G Asia Seoul** on [PyQGIS](https://talks.osgeo.org/foss4g-asia-2023/talk/8KDVRF/).
 
 I also presented at [QGIS Open Day Jan 2023](https://www.youtube.com/watch?v=eqIwEyuqH-Q) and attended **STAC Sprint 2023 in the USA**, where I began contributing to open-source projects by writing documentation on [STAC tutorial](https://github.com/jaiindimple/stac-site).
+
+I run a YouTube channel called [geosnips](https://www.youtube.com/@geosnipsstudio) focused on practical geospatial workflows using open-source tools. You'll find hands-on tutorials on **QGIS, GDAL, Rasterio, STAC, TiTiler**, and other open-source technologies for solving real-world GIS and remote sensing problems.
 
 ## Experience
 

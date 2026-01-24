@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-GB" xml:lang="en-GB"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dimple Jain">
+<meta name="dcterms.date" content="2026-01-24">
+<meta name="description" content="Learn how to use TiTiler’s STAC endpoints to explore and visualize satellite imagery. From basic info to advanced band math and colormaps.">
+
+<title>TiTiler with STAC – Dimple</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-2d01dac5deb81f30d2e298efbbbf2476.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Dimple</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../talks/"> 
+<span class="menu-text">Talks</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../posts/"> 
+<span class="menu-text">Posts</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-is-stac" id="toc-what-is-stac" class="nav-link active" data-scroll-target="#what-is-stac">What is STAC?</a></li>
+  <li><a href="#our-example-dataset" id="toc-our-example-dataset" class="nav-link" data-scroll-target="#our-example-dataset">Our Example Dataset</a></li>
+  <li><a href="#setting-up-titiler-for-stac" id="toc-setting-up-titiler-for-stac" class="nav-link" data-scroll-target="#setting-up-titiler-for-stac">Setting Up TiTiler for STAC</a></li>
+  <li><a href="#getting-stac-item-info-stacinfo" id="toc-getting-stac-item-info-stacinfo" class="nav-link" data-scroll-target="#getting-stac-item-info-stacinfo">1. Getting STAC Item Info <code>/stac/info</code>:</a>
+  <ul class="collapse">
+  <li><a href="#basic-info-request" id="toc-basic-info-request" class="nav-link" data-scroll-target="#basic-info-request">Basic Info Request</a></li>
+  <li><a href="#info-for-specific-asset" id="toc-info-for-specific-asset" class="nav-link" data-scroll-target="#info-for-specific-asset">Info for Specific Asset</a></li>
+  </ul></li>
+  <li><a href="#quick-preview-stacpreview" id="toc-quick-preview-stacpreview" class="nav-link" data-scroll-target="#quick-preview-stacpreview">2. Quick Preview: <code>/stac/preview</code></a>
+  <ul class="collapse">
+  <li><a href="#preview-the-visual-asset-rgb" id="toc-preview-the-visual-asset-rgb" class="nav-link" data-scroll-target="#preview-the-visual-asset-rgb">Preview the Visual Asset (RGB)</a></li>
+  <li><a href="#preview-with-output-format" id="toc-preview-with-output-format" class="nav-link" data-scroll-target="#preview-with-output-format">Preview with Output Format</a></li>
+  </ul></li>
+  <li><a href="#map-tiles-stactilestilematrixsetidzxy" id="toc-map-tiles-stactilestilematrixsetidzxy" class="nav-link" data-scroll-target="#map-tiles-stactilestilematrixsetidzxy">3. Map Tiles: <code>/stac/tiles/{tileMatrixSetId}/{z}/{x}/{y}</code></a>
+  <ul class="collapse">
+  <li><a href="#finding-tile-coordinates-z-x-y" id="toc-finding-tile-coordinates-z-x-y" class="nav-link" data-scroll-target="#finding-tile-coordinates-z-x-y">Finding Tile Coordinates (Z, X, Y)</a></li>
+  <li><a href="#basic-tile-request" id="toc-basic-tile-request" class="nav-link" data-scroll-target="#basic-tile-request">Basic Tile Request</a></li>
+  <li><a href="#using-assets-parameter" id="toc-using-assets-parameter" class="nav-link" data-scroll-target="#using-assets-parameter">Using <code>assets</code> Parameter</a></li>
+  <li><a href="#using-asset_bidx---band-selection" id="toc-using-asset_bidx---band-selection" class="nav-link" data-scroll-target="#using-asset_bidx---band-selection">Using <code>asset_bidx</code> - Band Selection</a></li>
+  <li><a href="#creating-rgb-composites-with-asset_bidx" id="toc-creating-rgb-composites-with-asset_bidx" class="nav-link" data-scroll-target="#creating-rgb-composites-with-asset_bidx">Creating RGB Composites with <code>asset_bidx</code></a></li>
+  <li><a href="#using-rescale---adjust-value-range" id="toc-using-rescale---adjust-value-range" class="nav-link" data-scroll-target="#using-rescale---adjust-value-range">Using <code>rescale</code> - Adjust Value Range</a></li>
+  <li><a href="#using-expression---band-math" id="toc-using-expression---band-math" class="nav-link" data-scroll-target="#using-expression---band-math">Using <code>expression</code> - Band Math</a></li>
+  <li><a href="#using-colormap_name---apply-color-palettes" id="toc-using-colormap_name---apply-color-palettes" class="nav-link" data-scroll-target="#using-colormap_name---apply-color-palettes">Using <code>colormap_name</code> - Apply Color Palettes</a></li>
+  <li><a href="#visualize-at-the-image-extent-or-crop-to-custom-bounds" id="toc-visualize-at-the-image-extent-or-crop-to-custom-bounds" class="nav-link" data-scroll-target="#visualize-at-the-image-extent-or-crop-to-custom-bounds">Visualize at the Image Extent or Crop to Custom Bounds</a></li>
+  <li><a href="#using-with-leaflet" id="toc-using-with-leaflet" class="nav-link" data-scroll-target="#using-with-leaflet">Using with Leaflet</a></li>
+  </ul></li>
+  <li><a href="#common-issues" id="toc-common-issues" class="nav-link" data-scroll-target="#common-issues">Common Issues</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">TiTiler with STAC</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Web GIS</div>
+    <div class="quarto-category">Raster Data Visualization</div>
+    <div class="quarto-category">STAC</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Learn how to use TiTiler’s STAC endpoints to explore and visualize satellite imagery. From basic info to advanced band math and colormaps.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Dimple Jain <a href="mailto:jain23dimple@gmail.com" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">24 January 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In our <a href="../../posts/titiler-intro/index.html">previous post</a>, we set up TiTiler for serving Cloud-Optimized GeoTIFFs. Now let’s explore how TiTiler works with STAC (SpatioTemporal Asset Catalog) - a standardized way to describe and organize geospatial data.</p>
+<blockquote class="blockquote">
+<p><strong>Prerequisites</strong>: For Python environment and TiTiler setup, check out the <a href="../../posts/titiler-intro/index.html">Getting Started with TiTiler</a> post.</p>
+</blockquote>
+<section id="what-is-stac" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-stac">What is <a href="https://stacspec.org/en">STAC</a>?</h2>
+<p>STAC is like a library catalog for satellite imagery. Instead of searching through folders, you get structured JSON files that tell you:</p>
+<ul>
+<li><strong>What</strong>: Type of imagery, bands available, resolution</li>
+<li><strong>Where</strong>: Geographic location (bounding box, geometry)</li>
+<li><strong>When</strong>: Capture date and time</li>
+<li><strong>How</strong>: Direct links to the actual data files (assets)</li>
+</ul>
+</section>
+<section id="our-example-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="our-example-dataset">Our Example Dataset</h2>
+<p>Throughout this tutorial, we’ll use openly available Maxar satellite imagery from the Bay of Bengal Cyclone Mocha event:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">https://maxar-opendata.s3.amazonaws.com/events/BayofBengal-Cyclone-Mocha-May-23/ard/46/033111333030/2023-05-22/10300110E84B5A00.json</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This STAC item contains:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 48%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Asset</th>
+<th>Description</th>
+<th>Bands</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>visual</code></td>
+<td>True color RGB</td>
+<td>Red, Green, Blue</td>
+</tr>
+<tr class="even">
+<td><code>ms_analytic</code></td>
+<td>Multispectral</td>
+<td>Coastal, Blue, Green, Yellow, Red, RedEdge, NIR1, NIR2</td>
+</tr>
+<tr class="odd">
+<td><code>pan_analytic</code></td>
+<td>Panchromatic</td>
+<td>Single band (high resolution)</td>
+</tr>
+<tr class="even">
+<td><code>data-mask</code></td>
+<td>Valid data mask</td>
+<td>Single band</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="blockquote">
+<p><strong>Tip</strong>: Explore other open datasets at <a href="https://stacindex.org/catalogs">STAC Index</a> to practice with different imagery</p>
+</blockquote>
+</section>
+<section id="setting-up-titiler-for-stac" class="level2">
+<h2 class="anchored" data-anchor-id="setting-up-titiler-for-stac">Setting Up TiTiler for STAC</h2>
+<p>Make sure your <code>main.py</code> includes the STAC router:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fastapi <span class="im">import</span> FastAPI</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> titiler.core.factory <span class="im">import</span> TilerFactory, MultiBaseTilerFactory</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> starlette.middleware.cors <span class="im">import</span> CORSMiddleware</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rio_tiler.io <span class="im">import</span> STACReader</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> FastAPI(title<span class="op">=</span><span class="st">"TiTiler"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>app.add_middleware(</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    CORSMiddleware,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    allow_origins<span class="op">=</span>[<span class="st">"*"</span>],</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    allow_credentials<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    allow_methods<span class="op">=</span>[<span class="st">"*"</span>],</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    allow_headers<span class="op">=</span>[<span class="st">"*"</span>],</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># COG endpoints</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>cog <span class="op">=</span> TilerFactory()</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>app.include_router(cog.router, prefix<span class="op">=</span><span class="st">"/cog"</span>, tags<span class="op">=</span>[<span class="st">"COG"</span>])</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co"># STAC endpoints</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>stac <span class="op">=</span> MultiBaseTilerFactory(reader<span class="op">=</span>STACReader)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>app.include_router(stac.router, prefix<span class="op">=</span><span class="st">"/stac"</span>, tags<span class="op">=</span>[<span class="st">"STAC"</span>])</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="at">@app.get</span>(<span class="st">"/"</span>)</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> read_index():</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">"message"</span>: <span class="st">"Welcome to TiTiler!"</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>What’s new for STAC</strong>: We import <code>STACReader</code> from <code>rio_tiler.io</code> and use <code>MultiBaseTilerFactory</code> (instead of <code>TilerFactory</code>) to create STAC endpoints - this factory understands how to read multiple assets from a single STAC item.</p>
+<p>Start the server:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uvicorn</span> main:app <span class="at">--reload</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Open your browser and go to: <code>http://127.0.0.1:8000/docs</code> - Explore the interactive API documentation.</p>
+<p><img src="stac_api_docs.png" class="img-fluid"></p>
+<hr>
+</section>
+<section id="getting-stac-item-info-stacinfo" class="level2">
+<h2 class="anchored" data-anchor-id="getting-stac-item-info-stacinfo">1. Getting STAC Item Info <code>/stac/info</code>:</h2>
+<p>Before visualizing, let’s understand what’s in our STAC item. The <code>/stac/info</code> endpoint returns metadata about available assets and their properties.</p>
+<section id="basic-info-request" class="level3">
+<h3 class="anchored" data-anchor-id="basic-info-request">Basic Info Request</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">http://127.0.0.1:8000/stac/info?url=https://maxar-opendata.s3.amazonaws.com/events/BayofBengal-Cyclone-Mocha-May-23/ard/46/033111333030/2023-05-22/10300110E84B5A00.json</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="info-for-specific-asset" class="level3">
+<h3 class="anchored" data-anchor-id="info-for-specific-asset">Info for Specific Asset</h3>
+<p>To get detailed information about a specific asset:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">http://127.0.0.1:8000/stac/info?url=https://maxar-opendata.s3.amazonaws.com/events/BayofBengal-Cyclone-Mocha-May-23/ard/46/033111333030/2023-05-22/10300110E84B5A00.json</span><span class="kw">&amp;</span><span class="va">assets</span><span class="op">=</span>visual</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="stac_asset_info.png" class="img-fluid"></p>
+<hr>
+</section>
+</section>
+<section id="quick-preview-stacpreview" class="level2">
+<h2 class="anchored" data-anchor-id="quick-preview-stacpreview">2. Quick Preview: <code>/stac/preview</code></h2>
+<p>The <code>/stac/preview</code> endpoint generates a downsampled image of your data - perfect for quick visualization.</p>
+<section id="preview-the-visual-asset-rgb" class="level3">
+<h3 class="anchored" data-anchor-id="preview-the-visual-asset-rgb">Preview the Visual Asset (RGB)</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">http://127.0.0.1:8000/stac/preview?url=https://maxar-opendata.s3.amazonaws.com/events/BayofBengal-Cyclone-Mocha-May-23/ard/46/033111333030/2023-05-22/10300110E84B5A00.json</span><span class="kw">&amp;</span><span class="va">assets</span><span class="op">=</span>visual</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>True Color visual asset: <img src="stac_asset_preview.png" class="img-fluid" alt="stac_asset_preview.png"></p>
+</section>
+<section id="preview-with-output-format" class="level3">
+<h3 class="anchored" data-anchor-id="preview-with-output-format">Preview with Output Format</h3>
+<p>You can specify the output format:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># JPEG output (smaller file size)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">http://127.0.0.1:8000/stac/preview.jpg?url=https://maxar-opendata.s3.amazonaws.com/events/BayofBengal-Cyclone-Mocha-May-23/ard/46/033111333030/2023-05-22/10300110E84B5A00.json</span><span class="kw">&amp;</span><span class="va">assets</span><span class="op">=</span>visual</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># WebP output (modern format, good compression)</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ex">http://127.0.0.1:8000/stac/preview.webp?url=https://maxar-opendata.s3.amazonaws.com/events/BayofBengal-Cyclone-Mocha-May-23/ard/46/033111333030/2023-05-22/10300110E84B5A00.json</span><span class="kw">&amp;</span><span class="va">assets</span><span class="op">=</span>visual</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<hr>
+</section>
+</section>
+<section id="map-tiles-stactilestilematrixsetidzxy" class="level2">
+<h2 class="anchored" data-anchor-id="map-tiles-stactilestilematrixsetidzxy">3. Map Tiles: <code>/stac/tiles/{tileMatrixSetId}/{z}/{x}/{y}</code></h2>
+<p>For web maps, you need tiles - small image pieces that load progressively as users pan and zoom. This is the most powerful endpoint for building interactive maps.</p>
+<section id="finding-tile-coordinates-z-x-y" class="level3">
+<h3 class="anchored" data-anchor-id="finding-tile-coordinates-z-x-y">Finding Tile Coordinates (Z, X, Y)</h3>
+<p>To request a specific tile, you need to know its coordinates. You can calculate these from the STAC item’s bounding box using the <code>mercantile</code> library.</p>
+<p><strong>Important</strong>: STAC items have two types of bounding boxes:</p>
+<ul>
+<li><strong><code>bbox</code></strong> - Always in WGS84 (lon/lat) - <strong>use this for tile calculations</strong></li>
+<li><strong><code>proj:bbox</code></strong> - In the asset’s projection (e.g., UTM meters) - don’t use this directly</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> httpx</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> mercantile</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Fetch the STAC item</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>stac_url <span class="op">=</span> <span class="st">"https://maxar-opendata.s3.amazonaws.com/events/BayofBengal-Cyclone-Mocha-May-23/ard/46/033111333030/2023-05-22/10300110E84B5A00.json"</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>item <span class="op">=</span> httpx.get(stac_url).json()</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the WGS84 bbox (not proj:bbox!)</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>bbox <span class="op">=</span> item[<span class="st">"bbox"</span>]  <span class="co"># [92.724, 20.481, 92.761, 20.530]</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate center point</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>lon <span class="op">=</span> (bbox[<span class="dv">0</span>] <span class="op">+</span> bbox[<span class="dv">2</span>]) <span class="op">/</span> <span class="dv">2</span>  <span class="co"># 92.743</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>lat <span class="op">=</span> (bbox[<span class="dv">1</span>] <span class="op">+</span> bbox[<span class="dv">3</span>]) <span class="op">/</span> <span class="dv">2</span>  <span class="co"># 20.506</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>zoom <span class="op">=</span> <span class="dv">15</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the tile containing this point</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>tile <span class="op">=</span> mercantile.tile(lon, lat, zoom)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"z=</span><span class="sc">{</span>tile<span class="sc">.</span>z<span class="sc">}</span><span class="ss">, x=</span><span class="sc">{</span>tile<span class="sc">.</span>x<span class="sc">}</span><span class="ss">, y=</span><span class="sc">{</span>tile<span class="sc">.</span>y<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Output: z=15, x=24825, y=14476</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<blockquote class="blockquote">
+<p><strong>Tip</strong>: Install mercantile with <code>pip install mercantile</code></p>
+</blockquote>
+</section>
+<section id="basic-tile-request" class="level3">
+<h3 class="anchored" data-anchor-id="basic-tile-request">Basic Tile Request</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">http://127.0.0.1:8000/stac/tiles/WebMercatorQuad/15/24825/14476.png?url=https://maxar-opendata.s3.amazonaws.com/events/BayofBengal-Cyclone-Mocha-May-23/ard/46/033111333030/2023-05-22/10300110E84B5A00.json</span><span class="kw">&amp;</span><span class="va">assets</span><span class="op">=</span>visual</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="stac_tile_zxy.png" class="img-fluid"></p>
+<p><strong>URL breakdown</strong>:</p>
+<ul>
+<li><code>WebMercatorQuad</code>: Standard web map projection (EPSG:3857)</li>
+<li><code>15</code>: Zoom level</li>
+<li><code>24825</code>: X tile coordinate</li>
+<li><code>14476</code>: Y tile coordinate</li>
+<li><code>.png</code>: Output format</li>
+</ul>
+</section>
+<section id="using-assets-parameter" class="level3">
+<h3 class="anchored" data-anchor-id="using-assets-parameter">Using <code>assets</code> Parameter</h3>
+<p>The <code>assets</code> parameter specifies which asset(s) to render:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Single asset (visual - RGB)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&amp;</span><span class="va">assets</span><span class="op">=</span>visual</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiple assets (for band combinations from different assets)</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&amp;</span><span class="va">assets</span><span class="op">=</span>ms_analytic<span class="kw">&amp;</span><span class="va">assets</span><span class="op">=</span>pan_analytic</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="using-asset_bidx---band-selection" class="level3">
+<h3 class="anchored" data-anchor-id="using-asset_bidx---band-selection">Using <code>asset_bidx</code> - Band Selection</h3>
+<p>When working with multi-band asset, use <code>asset_bidx</code> to select specific bands:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select band 3 (Green) from ms_analytic</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">http://127.0.0.1:8000/stac/tiles/WebMercatorQuad/15/24825/14476.png?url=https://maxar-opendata.s3.amazonaws.com/events/BayofBengal-Cyclone-Mocha-May-23/ard/46/033111333030/2023-05-22/10300110E84B5A00.json</span><span class="kw">&amp;</span><span class="va">assets</span><span class="op">=</span>ms_analytic<span class="kw">&amp;</span><span class="va">asset_bidx</span><span class="op">=</span>ms_analytic<span class="kw">|</span><span class="ex">3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Band indices for <code>ms_analytic</code></strong>:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Index</th>
+<th>Band Name</th>
+<th>Common Name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>BAND_C</td>
+<td>Coastal</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>BAND_B</td>
+<td>Blue</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>BAND_G</td>
+<td>Green</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>BAND_Y</td>
+<td>Yellow</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>BAND_R</td>
+<td>Red</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>BAND_RE</td>
+<td>Red Edge</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>BAND_N</td>
+<td>NIR (Near Infrared)</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>BAND_N2</td>
+<td>NIR2</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="creating-rgb-composites-with-asset_bidx" class="level3">
+<h3 class="anchored" data-anchor-id="creating-rgb-composites-with-asset_bidx">Creating RGB Composites with <code>asset_bidx</code></h3>
+<p>Create false-color composites by specifying 3 bands:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Natural Color (Red, Green, Blue - bands 5,3,2)</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&amp;</span><span class="va">assets</span><span class="op">=</span>ms_analytic<span class="kw">&amp;</span><span class="va">asset_bidx</span><span class="op">=</span>ms_analytic<span class="kw">|</span><span class="ex">5,3,2</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># False Color Infrared (NIR, Red, Green - bands 7,5,3)</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&amp;</span><span class="va">assets</span><span class="op">=</span>ms_analytic<span class="kw">&amp;</span><span class="va">asset_bidx</span><span class="op">=</span>ms_analytic<span class="kw">|</span><span class="ex">7,5,3</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Agriculture (NIR, Green, Blue - bands 7,3,2)</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="kw">&amp;</span><span class="va">assets</span><span class="op">=</span>ms_analytic<span class="kw">&amp;</span><span class="va">asset_bidx</span><span class="op">=</span>ms_analytic<span class="kw">|</span><span class="ex">7,3,2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="using-rescale---adjust-value-range" class="level3">
+<h3 class="anchored" data-anchor-id="using-rescale---adjust-value-range">Using <code>rescale</code> - Adjust Value Range</h3>
+<p><strong>Important</strong>: Raw satellite data often has values outside the 0-255 display range. Without rescaling, images may appear black or washed out.</p>
+<blockquote class="blockquote">
+<p><strong>Tip</strong>: If your image appears black or too dark, try adjusting the rescale max value. Adjust based on your data min-max.</p>
+</blockquote>
+<p><strong>Full example - False Color Infrared with rescale</strong>:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">http://127.0.0.1:8000/stac/tiles/WebMercatorQuad/15/24825/14476.png?url=https://maxar-opendata.s3.amazonaws.com/events/BayofBengal-Cyclone-Mocha-May-23/ard/46/033111333030/2023-05-22/10300110E84B5A00.json</span><span class="kw">&amp;</span><span class="va">assets</span><span class="op">=</span>ms_analytic<span class="kw">&amp;</span><span class="va">asset_bidx</span><span class="op">=</span>ms_analytic<span class="kw">|</span><span class="ex">7,5,3</span><span class="kw">&amp;</span><span class="va">rescale</span><span class="op">=</span>0,2000</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="false_color.png" class="img-fluid"></p>
+</section>
+<section id="using-expression---band-math" class="level3">
+<h3 class="anchored" data-anchor-id="using-expression---band-math">Using <code>expression</code> - Band Math</h3>
+<p>The <code>expression</code> parameter lets you perform calculations across bands. This is powerful for creating vegetation indices, water indices, and more.</p>
+<p><strong>Syntax</strong>: Bands are referenced as <code>asset_name_b{index}</code> (e.g., <code>ms_analytic_b7</code> for NIR band).</p>
+<blockquote class="blockquote">
+<p><strong>Warning</strong>: The <code>+</code> sign in URLs is interpreted as a space! Use <code>%2B</code> instead of <code>+</code> in your expressions, otherwise you’ll get a syntax error.</p>
+</blockquote>
+<section id="ndvi-normalized-difference-vegetation-index" class="level4">
+<h4 class="anchored" data-anchor-id="ndvi-normalized-difference-vegetation-index">NDVI (Normalized Difference Vegetation Index)</h4>
+<p>NDVI highlights vegetation: <code>(NIR - Red) / (NIR + Red)</code></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">http://127.0.0.1:8000/stac/tiles/WebMercatorQuad/15/24825/14476.png?url=https://maxar-opendata.s3.amazonaws.com/events/BayofBengal-Cyclone-Mocha-May-23/ard/46/033111333030/2023-05-22/10300110E84B5A00.json</span><span class="kw">&amp;</span><span class="va">assets</span><span class="op">=</span>ms_analytic<span class="kw">&amp;</span><span class="va">expression</span><span class="op">=</span><span class="va">(</span>ms_analytic_b7-ms_analytic_b5<span class="va">)</span>/<span class="kw">(</span><span class="ex">ms_analytic_b7%2Bms_analytic_b5</span><span class="kw">)&amp;</span><span class="va">rescale</span><span class="op">=</span>-1,1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="ndvi_without_color.png" class="img-fluid"></p>
+</section>
+<section id="ndwi-normalized-difference-water-index" class="level4">
+<h4 class="anchored" data-anchor-id="ndwi-normalized-difference-water-index">NDWI (Normalized Difference Water Index)</h4>
+<p>NDWI highlights water bodies: <code>(Green - NIR) / (Green + NIR)</code></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">http://127.0.0.1:8000/stac/tiles/WebMercatorQuad/15/24825/14476.png?url=https://maxar-opendata.s3.amazonaws.com/events/BayofBengal-Cyclone-Mocha-May-23/ard/46/033111333030/2023-05-22/10300110E84B5A00.json</span><span class="kw">&amp;</span><span class="va">assets</span><span class="op">=</span>ms_analytic<span class="kw">&amp;</span><span class="va">expression</span><span class="op">=</span><span class="va">(</span>ms_analytic_b3-ms_analytic_b7<span class="va">)</span>/<span class="kw">(</span><span class="ex">ms_analytic_b3%2Bms_analytic_b7</span><span class="kw">)&amp;</span><span class="va">rescale</span><span class="op">=</span>-1,1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="simple-band-ratio" class="level4">
+<h4 class="anchored" data-anchor-id="simple-band-ratio">Simple Band Ratio</h4>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># NIR/Red ratio (vegetation vigor)</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&amp;</span><span class="va">expression</span><span class="op">=</span>ms_analytic_b7/ms_analytic_b5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="using-colormap_name---apply-color-palettes" class="level3">
+<h3 class="anchored" data-anchor-id="using-colormap_name---apply-color-palettes">Using <code>colormap_name</code> - Apply Color Palettes</h3>
+<p>When using expressions (which return single-band results), apply colormaps to make the data meaningful:</p>
+<p><strong><a href="https://titiler.xyz/colorMaps">List of Available colormaps</a></strong></p>
+<section id="ndvi-with-colormap" class="level4">
+<h4 class="anchored" data-anchor-id="ndvi-with-colormap">NDVI with Colormap</h4>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">http://127.0.0.1:8000/stac/tiles/WebMercatorQuad/15/24825/14476.png?url=https://maxar-opendata.s3.amazonaws.com/events/BayofBengal-Cyclone-Mocha-May-23/ard/46/033111333030/2023-05-22/10300110E84B5A00.json</span><span class="kw">&amp;</span><span class="va">assets</span><span class="op">=</span>ms_analytic<span class="kw">&amp;</span><span class="va">expression</span><span class="op">=</span><span class="va">(</span>ms_analytic_b7-ms_analytic_b5<span class="va">)</span>/<span class="kw">(</span><span class="ex">ms_analytic_b7%2Bms_analytic_b5</span><span class="kw">)&amp;</span><span class="va">colormap_name</span><span class="op">=</span>rdylgn<span class="kw">&amp;</span><span class="va">rescale</span><span class="op">=</span>-1,1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li><code>colormap_name=rdylgn</code>: Red-Yellow-Green colormap (red=low NDVI, green=high NDVI)</li>
+<li><code>rescale=-1,1</code>: NDVI values range from -1 to 1</li>
+</ul>
+</section>
+<section id="water-index-with-blue-colormap" class="level4">
+<h4 class="anchored" data-anchor-id="water-index-with-blue-colormap">Water Index with Blue Colormap</h4>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">http://127.0.0.1:8000/stac/tiles/WebMercatorQuad/15/24825/14476.png?url=https://maxar-opendata.s3.amazonaws.com/events/BayofBengal-Cyclone-Mocha-May-23/ard/46/033111333030/2023-05-22/10300110E84B5A00.json</span><span class="kw">&amp;</span><span class="va">assets</span><span class="op">=</span>ms_analytic<span class="kw">&amp;</span><span class="va">expression</span><span class="op">=</span><span class="va">(</span>ms_analytic_b3-ms_analytic_b7<span class="va">)</span>/<span class="kw">(</span><span class="ex">ms_analytic_b3%2Bms_analytic_b7</span><span class="kw">)&amp;</span><span class="va">colormap_name</span><span class="op">=</span>blues<span class="kw">&amp;</span><span class="va">rescale</span><span class="op">=</span>-1,1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="visualize-at-the-image-extent-or-crop-to-custom-bounds" class="level3">
+<h3 class="anchored" data-anchor-id="visualize-at-the-image-extent-or-crop-to-custom-bounds">Visualize at the Image Extent or Crop to Custom Bounds</h3>
+<p><strong>NDVI on Image Extent</strong></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">http://127.0.0.1:8000/stac/bbox/92.724,20.481,92.761,20.530.png?url=https://maxar-opendata.s3.amazonaws.com/events/BayofBengal-Cyclone-Mocha-May-23/ard/46/033111333030/2023-05-22/10300110E84B5A00.json</span><span class="kw">&amp;</span><span class="va">assets</span><span class="op">=</span>ms_analytic<span class="kw">&amp;</span><span class="va">expression</span><span class="op">=</span><span class="va">(</span>ms_analytic_b7-ms_analytic_b5<span class="va">)</span>/<span class="kw">(</span><span class="ex">ms_analytic_b7%2Bms_analytic_b5</span><span class="kw">)&amp;</span><span class="va">colormap_name</span><span class="op">=</span>rdylgn<span class="kw">&amp;</span><span class="va">rescale</span><span class="op">=</span>-1,1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="full_ndvi.png" class="img-fluid"></p>
+<p><strong>URL breakdown:</strong></p>
+<ul>
+<li><code>/stac/bbox/92.724,20.481,92.761,20.530.png</code> - Bounding box: <code>minLon,minLat,maxLon,maxLat</code><br>
+</li>
+<li>Get these values from the STAC item’s <code>bbox</code> field</li>
+</ul>
+<hr>
+</section>
+<section id="using-with-leaflet" class="level3">
+<h3 class="anchored" data-anchor-id="using-with-leaflet">Using with Leaflet</h3>
+<div class="sourceCode" id="cb20"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!DOCTYPE</span> html<span class="dt">&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">html</span><span class="dt">&gt;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">title</span><span class="dt">&gt;</span>STAC + TiTiler Map<span class="dt">&lt;/</span><span class="kw">title</span><span class="dt">&gt;</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">link</span><span class="ot"> rel</span><span class="op">=</span><span class="st">"stylesheet"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> src</span><span class="op">=</span><span class="st">"https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"</span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> id</span><span class="op">=</span><span class="st">"map"</span><span class="ot"> style</span><span class="op">=</span><span class="st">"width: 100%; height: 600px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">script</span><span class="dt">&gt;</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> map <span class="op">=</span> L<span class="op">.</span><span class="fu">map</span>(<span class="st">'map'</span>)<span class="op">.</span><span class="fu">setView</span>([<span class="fl">20.506</span><span class="op">,</span> <span class="fl">92.743</span>]<span class="op">,</span> <span class="dv">14</span>)<span class="op">;</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Base map</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    L<span class="op">.</span><span class="fu">tileLayer</span>(<span class="st">'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'</span><span class="op">,</span> {</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>      <span class="dt">attribution</span><span class="op">:</span> <span class="st">'&amp;copy; OpenStreetMap'</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>    })<span class="op">.</span><span class="fu">addTo</span>(map)<span class="op">;</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">// TiTiler STAC layer</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> stacUrl <span class="op">=</span> <span class="st">'https://maxar-opendata.s3.amazonaws.com/events/BayofBengal-Cyclone-Mocha-May-23/ard/46/033111333030/2023-05-22/10300110E84B5A00.json'</span><span class="op">;</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> tileUrl <span class="op">=</span> <span class="vs">`http://127.0.0.1:8000/stac/tiles/WebMercatorQuad/{z}/{x}/{y}.png?url=</span><span class="sc">${</span><span class="pp">encodeURIComponent</span>(stacUrl)<span class="sc">}</span><span class="vs">&amp;assets=visual`</span><span class="op">;</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>    L<span class="op">.</span><span class="fu">tileLayer</span>(tileUrl<span class="op">,</span> {</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>      <span class="dt">opacity</span><span class="op">:</span> <span class="fl">0.8</span><span class="op">,</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>      <span class="dt">maxZoom</span><span class="op">:</span> <span class="dv">18</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>    })<span class="op">.</span><span class="fu">addTo</span>(map)<span class="op">;</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>To view the map:</strong></p>
+<ol type="1">
+<li>Save the code as <code>map.html</code><br>
+</li>
+<li>Make sure TiTiler server is running (<code>uvicorn main:app --reload</code>)<br>
+</li>
+<li>Open <code>map.html</code> in your browser (double-click or drag into browser)</li>
+</ol>
+<p><img src="stac_preview_map.png" class="img-fluid"></p>
+</section>
+</section>
+<section id="common-issues" class="level2">
+<h2 class="anchored" data-anchor-id="common-issues">Common Issues</h2>
+<p><strong>Asset not found</strong>: Check asset names in the STAC item JSON - they’re case-sensitive.</p>
+<p><strong>Black/white tiles</strong>: Your data values might be outside the default range. Use <code>rescale</code> to adjust.</p>
+<p><strong>Slow tiles</strong>: Large files take time. Consider using overviews or lower zoom levels for previews.</p>
+<p><strong>Expression errors</strong>: Make sure band references match exactly: <code>assetname_b{number}</code>.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

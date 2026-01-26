@@ -24,3 +24,5 @@ redirects:
 format:
   html:
     theme: carto
+
+google-analytics: "G-PG1CVW1JGP"

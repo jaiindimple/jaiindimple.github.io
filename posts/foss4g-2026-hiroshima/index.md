@@ -93,4 +93,9 @@ And then I started thinking that maybe our culture, society and environment also
 
 This trip made me think more about behaviour, trust, public spaces, discipline, patience and the small things a society quietly teaches us.
 
-![](volunteer_01.jpg){fig-alt="Volunteering at FOSS4G 2026 Hiroshima"}
+![](volunteer_01.jpg)
+
+I also want to thank the FOSS4G organising team for supporting me with a travel grant. It made this trip possible for me, and I am genuinely very grateful for that.
+
+Because of this support, I was only able to attend the conference, volunteer, meet the community again and present my talk, but also experience Japan in a way that made me think about so many things beyond technology and open source.
+

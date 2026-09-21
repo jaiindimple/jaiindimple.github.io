@@ -92,3 +92,5 @@ Why do I always want things faster? Why do I get anxious when I have to wait and
 And then I started thinking that maybe our culture, society and environment also shape us in the same way. Maybe this impatience also comes from somewhere.
 
 This trip made me think more about behaviour, trust, public spaces, discipline, patience and the small things a society quietly teaches us.
+
+![](volunteer_01.jpg){fig-alt="Volunteering at FOSS4G 2026 Hiroshima"}

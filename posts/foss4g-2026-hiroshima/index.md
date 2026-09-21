@@ -58,8 +58,8 @@ Before the conference, there was also a STAC sprint at JAXA. Honestly, entering 
 
 <table>
 <tr>
-<td><img src="jaxa_01.jpg" alt="STAC sprint at JAXA" height="300"></td>
-<td><img src="jaxa_02.jpg" alt="STAC sprint at JAXA" height="300"></td>
+<td width="50%"><img src="jaxa_01.jpg" alt="STAC sprint at JAXA" width="100%"></td>
+<td width="50%"><img src="jaxa_02.jpg" alt="STAC sprint at JAXA" width="100%"></td>
 </tr>
 </table>
 

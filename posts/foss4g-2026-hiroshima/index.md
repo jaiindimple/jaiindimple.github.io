@@ -6,7 +6,7 @@ categories:
   - Conference
   - Community
   - Travel
-description: "My second Global FOSS4G - volunteering, talks, a STAC workshop at JAXA, and everything Japan made me think about along the way."
+description: "FOSS4G - volunteering, talks, a STAC sprint at JAXA, and everything Japan made me think about along the way."
 image: volunteer_01.jpg
 draft: false
 ---
